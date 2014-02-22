@@ -1,7 +1,6 @@
 (ns niconico-clj.core
   (:require [clj-http.client :as client]
-            [clojure.string :as string]
-            [clojure.xml :as xml])
+            [clojure.string :as string])
   (:use [ring.util.codec :only [url-decode]]))
 
 (defn get-thumbinfo [video-id]
@@ -35,3 +34,8 @@
          "&sort=" sort
          "&order=" order
          "&video=" video))))
+
+(defn get-msg [video-id quantity]
+  (let [flvinfo (get-flv video-id)]
+    (:body
+     (client/get (str (:ms flvinfo) "thread?version=20090904&thread=" (:thread_id flvinfo) "&res_from=" quantity)))))
